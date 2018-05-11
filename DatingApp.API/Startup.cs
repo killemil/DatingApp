@@ -1,5 +1,7 @@
 ﻿namespace DatingApp.API
 {
+    using AutoMapper;
+    using DatingApp.API.Infrastructure.Extensions;
     using DatingApp.Data;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -21,6 +23,12 @@
             services
                 .AddDbContext<DatingAppDbContext>(options => options
                     .UseSqlite(this.Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDomainServices();
+
+            services.AddAutoMapper();
+
+            services.AddRouting(routing => routing.LowercaseUrls = true);
 
             services.AddMvc();
         }

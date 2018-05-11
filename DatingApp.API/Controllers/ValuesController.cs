@@ -1,29 +1,28 @@
 ﻿namespace DatingApp.API.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
+    using Infrastructure.Extensions;
     using System.Threading.Tasks;
+    using DatingApp.Services;
     using Microsoft.AspNetCore.Mvc;
+    using static WebConstants;
 
-    [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class ValuesController : BaseController
     {
-        // GET api/values
+        private readonly IValueService values;
+
+        public ValuesController(IValueService values)
+        {
+            this.values = values;
+        }
+
         [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        public async Task<IActionResult> Get()
+            => this.Ok(await this.values.All());
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        [HttpGet(WithId)]
+        public async Task<IActionResult> Get(int id)
+            => this.OkOrNotFound(await this.values.ById(id));
 
-        // POST api/values
         [HttpPost]
         public void Post([FromBody]string value)
         {

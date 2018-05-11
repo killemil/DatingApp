@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
   </ItemGroup>
 
@@ -17,7 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DatingApp.Common\DatingApp.Common.csproj" />
     <ProjectReference Include="..\DatingApp.Data\DatingApp.Data.csproj" />
+    <ProjectReference Include="..\DatingApp.Services\DatingApp.Services.csproj" />
   </ItemGroup>
 
 </Project>
