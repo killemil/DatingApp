@@ -22,7 +22,7 @@
         [HttpGet(WithId)]
         public async Task<IActionResult> Get(int id)
             => this.OkOrNotFound(await this.values.ById(id));
-
+            
         [HttpPost]
         public void Post([FromBody]string value)
         {
