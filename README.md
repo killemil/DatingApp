@@ -1,2 +1,2 @@
 # DatingApp
-ASP .NET Core / Anglular
+ASP .NET Core / Angular
