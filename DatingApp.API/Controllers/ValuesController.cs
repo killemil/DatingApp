@@ -4,8 +4,10 @@
     using System.Threading.Tasks;
     using DatingApp.Services;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Authorization;
     using static WebConstants;
 
+    [Authorize]
     public class ValuesController : BaseController
     {
         private readonly IValueService values;

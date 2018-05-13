@@ -1,12 +1,10 @@
 ﻿namespace DatingApp.Services.Implementations
 {
-    using System;
-    using System.Threading.Tasks;
     using System.Security.Cryptography;
+    using System.Threading.Tasks;
     using System.Text;
     using DatingApp.Data;
     using DatingApp.Data.Models;
-    using System.Linq;
     using Microsoft.EntityFrameworkCore;
 
     public class AuthService : IAuthService
@@ -18,13 +16,17 @@
             this.db = db;
         }
 
-        public async Task<User> Register(User user, string password)
+        public async Task<User> Register(string username, string password)
         {
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
 
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
+            var user = new User
+            {
+                Username = username,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt
+            };
 
             await db.Users.AddAsync(user);
             await db.SaveChangesAsync();
@@ -51,14 +53,7 @@
         }
 
         public async Task<bool> IsUserExist(string username)
-        {
-            if (await db.Users.AnyAsync(u => u.Username == username))
-            {
-                return true;
-            }
-
-            return false;
-        }
+            => await db.Users.AnyAsync(u => u.Username == username);
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
