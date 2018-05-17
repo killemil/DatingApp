@@ -1,0 +1,56 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">Dating App</a>
+
+  <div class="navbar-collapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="#">Matches</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Lists</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Messages</a>
+      </li>
+    </ul>
+
+    <form *ngIf="!loggedIn()" #loginForm="ngForm" class="form-inline my-2 my-lg-0" (ngSubmit)="login()">
+      <div class="col-auto pl-0">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <i class="fa fa-user"></i>
+            </div>
+          </div>
+          <input type="text" #username="ngModel" class="form-control" placeholder="Email" name="username" required [(ngModel)]="model.username">
+        </div>
+      </div>
+      <div class="col-auto pl-0">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <i class="fa fa-lock"></i>
+            </div>
+          </div>
+          <input type="password" #password="ngModel" class="form-control" placeholder="Password" name="password" required [(ngModel)]="model.password">
+        </div>
+      </div>
+      <div class="col-auto pl-0 pr-0">
+        <button class="btn btn-success my-2 my-sm-0" [disabled]="!loginForm.valid" type="submit">Login</button>
+      </div>
+    </form>
+
+    <div *ngIf="loggedIn()" class="dropdown show">
+      <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false">
+        Welcome User
+      </a>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Edit Profile</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" (click)="logout()"><i class="fa fa-sign-out"></i> Logout</a>
+      </div>
+    </div>
+
+  </div>
+</nav>

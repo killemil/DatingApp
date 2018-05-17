@@ -7,7 +7,7 @@
     using Microsoft.AspNetCore.Authorization;
     using static WebConstants;
 
-    [Authorize]
+    [AllowAnonymous]
     public class ValuesController : BaseController
     {
         private readonly IValueService values;
