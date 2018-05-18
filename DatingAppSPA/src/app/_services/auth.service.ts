@@ -1,30 +1,41 @@
 import { Injectable } from '@angular/core';
 import { Http, RequestOptions, Headers, Response } from '@angular/http';
-import { Observable } from 'rxjs';
-import { filter, map, catchError } from 'rxjs/operators';
-
+import { Observable, throwError } from 'rxjs';
+import { map, filter, catchError, mergeMap } from 'rxjs/operators';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable()
 export class AuthService {
  baseUrl = 'http://localhost:53146/api/auth/';
  usertoken: any;
+ decodedToken: any;
+ jwtHelper: JwtHelperService = new JwtHelperService();
 
 constructor(private http: Http) { }
+
 
 login(model: any) {
   return this.http
     .post(this.baseUrl + 'login', model, this.requestOptions())
-    .pipe(map((response: Response) => {
+    .pipe(
+      map((response: Response) => {
       const user = response.json();
       if (user) {
         localStorage.setItem('token', user.tokenString);
+        this.decodedToken = this.jwtHelper.decodeToken(user.tokenString);
         this.usertoken  = user.tokenString;
-      }}));
+      }}),
+      catchError(this.handleError));
 }
 
   register(model: any) {
     return this.http
-      .post(this.baseUrl + 'register', model, this.requestOptions());
+      .post(this.baseUrl + 'register', model, this.requestOptions())
+      .pipe(catchError(this.handleError));
+  }
+
+  loggedIn() {
+    return localStorage.getItem('token') ? true : false;
   }
 
   private requestOptions() {
@@ -37,7 +48,7 @@ login(model: any) {
     const applicationError = error.headers.get('Application-Error');
 
     if (applicationError) {
-      return Observable.throw(applicationError);
+      return throwError(applicationError);
     }
 
     const serverError = error.json();
@@ -51,7 +62,7 @@ login(model: any) {
       }
     }
 
-    return Observable.create(new Error(modelStateErrors || 'Server error'));
+    return throwError(modelStateErrors || 'Server error');
   }
 
 }
