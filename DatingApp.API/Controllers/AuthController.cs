@@ -26,16 +26,16 @@
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserForRegisterDto userData)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             userData.Username = userData.Username.ToLower();
 
             if (await auth.IsUserExist(userData.Username))
             {
                 ModelState.AddModelError("Username", "Username is already taken.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
             }
 
             var createdUser = auth.Register(userData.Username, userData.Password);
