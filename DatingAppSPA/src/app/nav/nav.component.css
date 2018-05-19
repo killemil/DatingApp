@@ -2,6 +2,10 @@
     cursor: pointer;
 }
 
-.dropdown-item:hover {
-    background-color: whitesmoke;
+#logoutBtn:hover    {
+    color: white;
+}
+
+#loginFormContainer form {
+ float: right;
 }
