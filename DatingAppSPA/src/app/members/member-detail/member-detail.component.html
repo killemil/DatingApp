@@ -1,0 +1,77 @@
+<div class="container">
+  <div class="row">
+    <h1>{{user?.knownAs}}'s Profile</h1>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="card">
+        <img class="profile-image thumbnail" src="{{user?.photoUrl}}" alt="{{user?.knownAs}}">
+        <div class="card-body">
+          <div>
+            <strong>Location:</strong>
+            <p>{{user?.city}}, {{user?.country}}</p>
+          </div>
+          <div>
+            <strong>Age:</strong>
+            <p>{{user?.age}}</p>
+          </div>
+          <div>
+            <strong>Last Active:</strong>
+            <p>{{user?.lastActive}}</p>
+          </div>
+          <div>
+            <strong>Member Since</strong>
+            <p>{{user?.created}}</p>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="btn-group-justified">
+            <div class="btn-group">
+              <button class="btn btn-primary">Like</button>
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-success  ">Message</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-8">
+      <div class="tab-container">
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" href="#about" role="tab" data-toggle="tab">About {{user?.knownAs}}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#interests" role="tab" data-toggle="tab">Interests</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#photos" role="tab" data-toggle="tab">Photos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#messages" role="tab" data-toggle="tab">Messages</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane fade in active" id="about">
+            <h4>Description</h4>
+            <p>{{user?.introduction}}</p>
+            <h4>Looking for:</h4>
+            <p>{{user?.lookingFor}}</p>
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="interests">
+            <h4>Interests:</h4>
+            <p>{{user?.interests}}</p>
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="photos">
+              <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="messages">
+            <p>Messages</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

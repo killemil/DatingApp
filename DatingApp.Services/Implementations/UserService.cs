@@ -19,26 +19,50 @@
         }
 
         public void Add<T>(T entity) where T : class
-            => context.Add(entity);
+            => this.context.Add(entity);
 
         public void Delete<T>(T entity) where T : class
-            => context.Remove(entity);
+            => this.context.Remove(entity);
 
         public async Task<UserForDetailsSM> GetUser(int id)
-            => await context
+        {
+            var mainPhotoUrl = await this.context
                 .Users
-                .Where(u=> u.Id == id)
-                .ProjectTo<UserForDetailsSM>()
+                .Where(u => u.Id == id)
+                .Select(p => p.Photos.FirstOrDefault(s => s.IsMain).Url)
                 .FirstOrDefaultAsync();
 
+            var user = await this.context
+                   .Users
+                   .Where(u => u.Id == id)
+                   .ProjectTo<UserForDetailsSM>()
+                   .FirstOrDefaultAsync();
+
+            user.PhotoUrl = mainPhotoUrl;
+
+            return user;
+        }
+
         public async Task<IEnumerable<UserForListingSM>> GetUsers()
-            => await context
-                .Users
-                .Include(p => p.Photos)
-                .ProjectTo<UserForListingSM>()
-                .ToListAsync();
+        {
+            var users = await this.context
+                   .Users
+                   .ProjectTo<UserForListingSM>()
+                   .ToListAsync();
+
+            foreach (var user in users)
+            {
+                user.PhotoUrl = this.context
+                    .Users
+                    .Where(u => u.Id == user.Id)
+                    .Select(p => p.Photos.FirstOrDefault(s => s.IsMain).Url)
+                    .FirstOrDefault();
+            }
+
+            return users;
+        }
 
         public async Task<bool> SaveAll()
-            => await context.SaveChangesAsync() > 0;
+            => await this.context.SaveChangesAsync() > 0;
     }
 }

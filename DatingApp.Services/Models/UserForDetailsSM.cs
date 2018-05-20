@@ -40,9 +40,11 @@
 
         public void ConfigureMapping(Profile mapper)
         {
-            mapper.CreateMap<User, UserForDetailsSM>()
-                 .ForMember(u => u.PhotoUrl,
-                     cfg => cfg.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain).Url));
+            //TODO not mapping photoUrl
+
+            //mapper.CreateMap<User, UserForListingSM>()
+            //      .ForMember(u => u.PhotoUrl,
+            //          cfg => cfg.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain).Url));
 
             mapper.CreateMap<User, UserForDetailsSM>()
                 .ForMember(u => u.Age,
