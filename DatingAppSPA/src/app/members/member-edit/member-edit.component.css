@@ -1,0 +1,36 @@
+.profile-image {
+    margin: 25px;
+    width: 85%;
+    height: 85%;
+  }
+  
+  .card-body {
+    padding: 0 25px;
+  }
+  
+  .card-footer {
+      padding: 10px 15px;
+      background-color: #fff;
+      border-top: none;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+  }
+  
+  .nav-tabs .nav-link.active {
+      border-bottom: 3px solid #593196;
+  }
+  .nav-tabs .nav-link:hover {
+      border-bottom: 3px solid #d5c3f1;
+      opacity: 0.4;
+  }
+
+  label {
+      margin: 5px;
+      font-weight: bold;
+  }
+
+  .container {
+      margin-top: 10px;
+  }
+  
+  

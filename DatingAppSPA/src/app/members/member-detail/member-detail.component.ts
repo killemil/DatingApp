@@ -13,14 +13,16 @@ import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gal
 export class MemberDetailComponent implements OnInit {
   user: User;
   galleryOptions: NgxGalleryOptions[];
-    galleryImages: NgxGalleryImage[];
+  galleryImages: NgxGalleryImage[];
 
   constructor(private userService: UserService,
     private alertify: AlertifyService,
     private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.loadUser();
+    this.route.data.subscribe(data => {
+      this.user = data['user'];
+    });
 
     this.galleryOptions = [
       {
@@ -32,17 +34,18 @@ export class MemberDetailComponent implements OnInit {
         preview: false
       }
     ];
+
+    this.galleryImages = this.getImages();
   }
 
-  loadUser() {
-    this.userService.getUser(+this.route.snapshot.params['id'])
-    .subscribe((user: User) => {
-      this.user = user;
-      this.galleryImages = this.getImages();
-    }, err => {
-      this.alertify.error(err);
-    });
-  }
+  // loadUser() {
+  //   this.userService.getUser(+this.route.snapshot.params['id'])
+  //   .subscribe((user: User) => {
+  //     this.user = user;
+  //   }, err => {
+  //     this.alertify.error(err);
+  //   });
+  // }
 
   getImages() {
     const imageUrls = [];

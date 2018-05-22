@@ -4,35 +4,34 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using DatingApp.Data;
-    using DatingApp.Data.Models;
     using Microsoft.EntityFrameworkCore;
     using DatingApp.Services.Models;
     using System.Linq;
 
     public class UserService : IUserService
     {
-        private readonly DatingAppDbContext context;
+        private readonly DatingAppDbContext db;
 
-        public UserService(DatingAppDbContext context)
+        public UserService(DatingAppDbContext db)
         {
-            this.context = context;
+            this.db = db;
         }
 
         public void Add<T>(T entity) where T : class
-            => this.context.Add(entity);
+            => this.db.Add(entity);
 
         public void Delete<T>(T entity) where T : class
-            => this.context.Remove(entity);
+            => this.db.Remove(entity);
 
         public async Task<UserForDetailsSM> GetUser(int id)
         {
-            var mainPhotoUrl = await this.context
+            var mainPhotoUrl = await this.db
                 .Users
                 .Where(u => u.Id == id)
                 .Select(p => p.Photos.FirstOrDefault(s => s.IsMain).Url)
                 .FirstOrDefaultAsync();
 
-            var user = await this.context
+            var user = await this.db
                    .Users
                    .Where(u => u.Id == id)
                    .ProjectTo<UserForDetailsSM>()
@@ -45,14 +44,14 @@
 
         public async Task<IEnumerable<UserForListingSM>> GetUsers()
         {
-            var users = await this.context
+            var users = await this.db
                    .Users
                    .ProjectTo<UserForListingSM>()
                    .ToListAsync();
 
             foreach (var user in users)
             {
-                user.PhotoUrl = this.context
+                user.PhotoUrl = this.db
                     .Users
                     .Where(u => u.Id == user.Id)
                     .Select(p => p.Photos.FirstOrDefault(s => s.IsMain).Url)
@@ -63,6 +62,30 @@
         }
 
         public async Task<bool> SaveAll()
-            => await this.context.SaveChangesAsync() > 0;
+            => await this.db.SaveChangesAsync() > 0;
+
+        public async Task<bool> IsUserExists(int id)
+        {
+            var user = await this.db.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public async void UpdateUser(int id, string interests, string lookingFor, string introducton, string city, string country)
+        {
+            var currentUser = await this.db.Users.FindAsync(id);
+            currentUser.Interests = interests;
+            currentUser.LookingFor = lookingFor;
+            currentUser.Introduction = introducton;
+            currentUser.City = city;
+            currentUser.Country = country;
+
+            await this.db.SaveChangesAsync();
+        }
     }
 }

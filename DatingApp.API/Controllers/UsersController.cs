@@ -1,9 +1,11 @@
 ﻿namespace DatingApp.API.Controllers
 {
+    using DatingApp.API.Dtos;
     using DatingApp.API.Infrastructure.Extensions;
     using DatingApp.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System.Security.Claims;
     using System.Threading.Tasks;
     using static WebConstants;
 
@@ -31,6 +33,33 @@
             var user = await this.users.GetUser(id);
 
             return this.OkOrNotFound(user);
+        }
+
+        [HttpPut(WithId)]
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserForUpdateDto userData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.BadRequest(ModelState);
+            }
+
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+            var userFromRepo = await this.users.GetUser(id);
+
+            if (userFromRepo == null)
+            {
+                return NotFound($"Could not find user with and ID of {id}");
+            }
+
+            if (currentUserId != userFromRepo.Id)
+            {
+                return this.Unauthorized();
+            }
+
+            this.users.UpdateUser(id, userData.Interests, userData.LookingFor, userData.Introduction, userData.City, userData.Country);
+
+            return this.NoContent();
         }
     }
 }

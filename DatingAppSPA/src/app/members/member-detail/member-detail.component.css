@@ -24,6 +24,7 @@
     border-bottom: 3px solid #593196;
 }
 .nav-tabs .nav-link:hover {
-    border-bottom: 3px solid #593196;
+    border-bottom: 3px solid #d5c3f1;
+    opacity: 0.4;
 }
 

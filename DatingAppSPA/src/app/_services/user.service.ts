@@ -27,6 +27,12 @@ constructor(private http: Http) { }
      map(response => <User>response.json()), catchError(this.handleError));
  }
 
+ updateUser(id: number, user: User) {
+   return this.http.put(this.baseUrl + 'users/' + id, user, this.jwt())
+   .pipe(
+     map(response => response.json()), catchError(this.handleError));
+ }
+
  private jwt() {
    const token = localStorage.getItem('token');
    if (token) {
