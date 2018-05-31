@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using DatingApp.API.Infrastructure.Extensions;
+    using DatingApp.Common.Infrastructure.Cloudinary;
     using DatingApp.Data;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
@@ -41,6 +42,8 @@
             services.AddMvc();
 
             services.AddCors();
+
+            services.Configure<CloudinarySettings>(this.Configuration.GetSection("CloudinarySettings"));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

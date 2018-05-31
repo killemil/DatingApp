@@ -20,6 +20,5 @@
         Task<bool> IsUserExists(int id);
 
         void UpdateUser(int id, string interests, string lookingFor, string introducton, string city, string country);
-
     }
 }
